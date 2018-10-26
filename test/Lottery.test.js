@@ -1,9 +1,12 @@
-const assert = require('assert')
-const ganache = require('ganache-cli')
-const Web3 = require('web3')
-const web3 = new Web3(ganache.provider())
+const assert = require('assert');
+const ganache = require('ganache-cli');
+const Web3 = require('web3');
 
-const { interface, bytecode } = require('../complie')
+// UPDATE THESE TWO LINES RIGHT HERE!!!!! <-----------------
+const provider = ganache.provider();
+const web3 = new Web3(provider);
+
+const { interface, bytecode } = require('../complie');
 
 let lottery
 let accounts
@@ -11,11 +14,13 @@ let accounts
 beforeEach(async () => {
     accounts = await web3.eth.getAccounts()
 
-    lottery = await new web3.eth.Contract(JSON.parse(interface))
-        .deploy({ data: bytecode })
-        .send({ from: accounts[0], gas: '1000000' })
+    lottery =  await new web3.eth.Contract(JSON.parse(interface))
+    .deploy({  data: '0x' + bytecode })
+    .send({ from: accounts[0], gas: '1000000' });
+    // ADD THIS ONE LINE RIGHT HERE!!!!! <---------------------
+    inbox.setProvider(provider);
 })
-console.log(lottery.options)
+// console.log(lottery.options)
 
 describe('Lottery Contract', () => {
   it('deploys a contract', () => {
